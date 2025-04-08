@@ -2,12 +2,12 @@ import React from 'react';
 import { Product } from '../types/Product';
 import ProductCard from './ProductCard';
 
-const ProductList: React.FC<{ products: Product[] }> = ({ products }) => {
+interface ProductListProps {
+    products: Product[];
+    onAddToCart: (product: Product) => void;
+}
 
-    const handleAddToCart = (product: Product) => {
-        console.log('Added to cart:', product.name);
-    }
-
+const ProductList: React.FC<ProductListProps> = ({ products, onAddToCart }) => {
     return (
         <div
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 max-w-7xl mx-auto my-12"
@@ -17,7 +17,7 @@ const ProductList: React.FC<{ products: Product[] }> = ({ products }) => {
                 <ProductCard
                     key={product.id}
                     product={product}
-                    onAddToCart={handleAddToCart}
+                    onAddToCart={onAddToCart}
                 />
             ))}
             {products.length === 0 && (

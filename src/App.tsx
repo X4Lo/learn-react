@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import ProductList from "./components/ProductList";
 import { Product } from "./types/Product";
@@ -72,18 +72,23 @@ function App() {
   ];
 
   const [cart, setCart] = useState<Product[]>([]);
+  const [cartCount, setCartCount] = useState<number>(0);
 
   const handleAddToCart = (product: Product) => {
     if (!cart.some((p: Product) => p.id == product.id)) {
-      setCart([...cart, product])
+      setCart([...cart, product]);
     }
   }
 
+  useEffect(() => {
+    setCartCount(cart.length);
+  }, [cart])
+
   return (
     <>
-      <Header />
+      <Header cartCount={cartCount} />
       <main className="container mx-auto min-h-screen" data-testid="product-list-container">
-        <ProductList products={products} />
+        <ProductList products={products} onAddToCart={handleAddToCart} />
       </main>
     </>
   );
