@@ -1,5 +1,7 @@
+import { useState } from "react";
 import Header from "./components/Header";
 import ProductList from "./components/ProductList";
+import { Product } from "./types/Product";
 
 function App() {
   const products = [
@@ -68,6 +70,14 @@ function App() {
       "category": "Cap"
     }
   ];
+
+  const [cart, setCart] = useState<Product[]>([]);
+
+  const handleAddToCart = (product: Product) => {
+    if (!cart.some((p: Product) => p.id == product.id)) {
+      setCart([...cart, product])
+    }
+  }
 
   return (
     <>
