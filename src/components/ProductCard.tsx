@@ -14,6 +14,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
     }
 
     const [isFlipped, setIsFlipped] = useState(false);
+    const [isInCart, setIsInCart] = useState(false);
 
     const handleCardClick = () => {
         setIsFlipped(!isFlipped);
@@ -47,10 +48,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
                                 </span>
                             </div>
                             <button
-                                className="mt-3 bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold py-2 px-4 rounded flex justify-center items-center gap-2 transition duration-300"
+                                className={`mt-3 text-white text-sm font-semibold py-2 px-4 rounded flex justify-center items-center gap-2 transition duration-300 ${isInCart ? 'bg-gray-500' : 'bg-blue-500 hover:bg-blue-600'}`}
+                                disabled={isInCart}
                                 onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleAddToCart();
+                                    if (!isInCart) {
+                                        e.stopPropagation();
+                                        setIsInCart(true);
+                                        handleAddToCart();
+                                    }
                                 }}
                             >
                                 <ShoppingCart size={20} />
@@ -66,7 +71,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 
