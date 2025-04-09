@@ -5,20 +5,21 @@ import { Product } from "./types/Product";
 import { StoreProvider, useStore } from "./context/StoreContext";
 
 const App: React.FC = () => {
-  const { products, cartItems, addToCart, removeFromCart, clearCart } = useStore();
+  const { products, cartItems, addToCart } = useStore();
 
-  const [cart, setCart] = useState<Product[]>([]);
+  // const [cart, setCart] = useState<Product[]>([]);
   const [cartCount, setCartCount] = useState<number>(0);
 
   const handleAddToCart = (product: Product) => {
-    if (!cart.some((p: Product) => p.id == product.id)) {
-      setCart([...cart, product]);
-    }
+    addToCart(product);
+    // if (!cart.some((p: Product) => p.id == product.id)) {
+    //   setCart([...cart, product]);
+    // }
   }
 
   useEffect(() => {
-    setCartCount(cart.length);
-  }, [cart])
+    setCartCount(cartItems.reduce((sum, item) => sum + item.quantity, 0));
+  }, [cartItems]);
 
   return (
     <>
@@ -32,10 +33,8 @@ const App: React.FC = () => {
 
 export default () => {
   return (
-    <>
-      <StoreProvider>
-        <App />
-      </StoreProvider>
-    </>
+    <StoreProvider>
+      <App />
+    </StoreProvider>
   )
 };
