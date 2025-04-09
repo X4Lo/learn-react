@@ -4,49 +4,55 @@ import { CartItem } from '../types/CartItem';
 import { Product } from '../types/Product';
 
 interface StoreContextProps {
-  products: Product[];
-  cartItems: CartItem[];
-  addToCart: (product: Product) => void;
-  removeFromCart: (productId: string) => void;
-  clearCart: () => void;
+    products: Product[];
+    cartItems: CartItem[];
+    setProducts: (products: Product[]) => void;
+    addToCart: (product: Product) => void;
+    removeFromCart: (productId: string) => void;
+    clearCart: () => void;
 }
 
 const StoreContext = createContext<StoreContextProps | undefined>(undefined);
 
 export const useStore = () => {
-  const context = useContext(StoreContext);
-  if (!context) {
-    throw new Error('useStore must be used within a StoreProvider');
-  }
-  return context;
+    const context = useContext(StoreContext);
+    if (!context) {
+        throw new Error('useStore must be used within a StoreProvider');
+    }
+    return context;
 };
 
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [state, dispatch] = useReducer(storeReducer, initialState);
+    const [state, dispatch] = useReducer(storeReducer, initialState);
 
-  const addToCart = (product: Product) => {
-    dispatch({ type: 'ADD_TO_CART', payload: product });
-  };
+    const setProducts = (products: Product[]) => {
+        dispatch({ type: 'SET_PRODUCTS', payload: products });
+    };
 
-  const removeFromCart = (productId: string) => {
-    dispatch({ type: 'REMOVE_FROM_CART', payload: productId });
-  };
+    const addToCart = (product: Product) => {
+        dispatch({ type: 'ADD_TO_CART', payload: product });
+    };
 
-  const clearCart = () => {
-    dispatch({ type: 'CLEAR_CART' });
-  };
+    const removeFromCart = (productId: string) => {
+        dispatch({ type: 'REMOVE_FROM_CART', payload: productId });
+    };
 
-  return (
-    <StoreContext.Provider
-      value={{
-        products: state.products,
-        cartItems: state.cartItems,
-        addToCart,
-        removeFromCart,
-        clearCart,
-      }}
-    >
-      {children}
-    </StoreContext.Provider>
-  );
+    const clearCart = () => {
+        dispatch({ type: 'CLEAR_CART' });
+    };
+
+    return (
+        <StoreContext.Provider
+            value={{
+                products: state.products,
+                cartItems: state.cartItems,
+                setProducts,
+                addToCart,
+                removeFromCart,
+                clearCart,
+            }}
+        >
+            {children}
+        </StoreContext.Provider>
+    );
 };
