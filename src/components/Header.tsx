@@ -7,12 +7,12 @@ const Header: React.FC<{ cartCount: number }> = ({ cartCount }) => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     <div className="flex-shrink-0">
-                        <a href="#" className="text-white text-lg font-bold">Logo</a>
+                        <a href="#" className="text-white text-lg font-bold">MyShop</a>
                     </div>
                     <div className="hidden md:block">
                         <ul className="flex space-x-4">
-                            <li><a href='#' className="text-gray-300 hover:bg-gray-700 px-3 py-2 rounded"><Link to="/">Products</Link></a></li>
-                            <li><a href='#' className="text-gray-300 hover:bg-gray-700 px-3 py-2 rounded"><Link to="/cart">Cart ({cartCount})</Link></a></li>
+                            <li><Link to="/"><a className="text-gray-300 hover:bg-gray-700 px-3 py-2 rounded">Products</a></Link></li>
+                            <li><Link to="/cart"><a className="text-gray-300 hover:bg-gray-700 px-3 py-2 rounded">Cart ({cartCount})</a></Link></li>
                         </ul>
                     </div>
                 </div>
