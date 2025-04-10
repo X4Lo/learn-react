@@ -1,21 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Product } from '../types/Product';
 import { MinusIcon, PlusIcon, ShoppingCart } from 'lucide-react';
+import { useStore } from '../context/StoreContext';
 
 interface ProductCardProps {
     product: Product;
-    onAddToCart: (product: Product) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+    const { cartItems, addToCart, setQuantity } = useStore();
+
+    useEffect(() => {
+        const existingCartItem = cartItems.find((item) => item.id === product.id);
+        if (existingCartItem) {
+            setIsInCart(true);
+            setLocalQuantity(existingCartItem.quantity);
+        } else {
+            setIsInCart(false);
+            setLocalQuantity(0);
+        }
+    }, [cartItems])
 
     const handleAddToCart = () => {
-        onAddToCart(product)
+        addToCart(product)
     }
 
     const [isFlipped, setIsFlipped] = useState(false);
     const [isInCart, setIsInCart] = useState(false);
-    const [quantity, setQuantity] = useState(0);
+    const [localQuantity, setLocalQuantity] = useState(0);
 
     const handleCardClick = () => {
         setIsFlipped(!isFlipped);
@@ -55,21 +67,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
                                         className="bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold py-2 px-3 rounded transition duration-300"
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            if (quantity > 1) {
-                                                setQuantity(quantity - 1);
-                                            } else {
-                                                setIsInCart(false);
+                                            if (localQuantity > 1) {
+                                                setQuantity(product.id, localQuantity - 1);
                                             }
                                         }}
                                     >
                                         <MinusIcon />
                                     </button>
-                                    <span className="text-lg font-semibold">{quantity}</span>
+                                    <span className="text-lg font-semibold">{localQuantity}</span>
                                     <button
                                         className="bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold py-2 px-3 rounded transition duration-300"
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            setQuantity(quantity + 1);
+                                            setQuantity(product.id, localQuantity + 1);
                                         }}
                                     >
                                         <PlusIcon />
@@ -80,8 +90,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
                                     className="mt-3 text-white text-sm font-semibold py-2 px-4 rounded flex justify-center items-center gap-2 transition duration-300 bg-blue-500 hover:bg-blue-600"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        setIsInCart(true);
-                                        setQuantity(1);
                                         handleAddToCart();
                                     }}
                                 >

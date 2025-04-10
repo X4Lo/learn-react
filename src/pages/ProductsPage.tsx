@@ -5,14 +5,10 @@ import axios from "axios";
 import ProductList from "../components/ProductList";
 
 const ProductsPage: React.FC = () => {
-    const { products, addToCart, setProducts } = useStore();
+    const { products, setProducts } = useStore();
 
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-
-    const handleAddToCart = (product: Product) => {
-        addToCart(product);
-    }
 
     useEffect(() => {
         fetchProducts();
@@ -40,7 +36,7 @@ const ProductsPage: React.FC = () => {
                 </div>
             }
             {!isLoading && !error &&
-                <ProductList products={products} onAddToCart={handleAddToCart} />
+                <ProductList products={products} />
             }
             {
                 error && (
