@@ -9,6 +9,7 @@ interface StoreContextProps {
     setProducts: (products: Product[]) => void;
     addToCart: (product: Product) => void;
     removeFromCart: (productId: string) => void;
+    setQuantity: (productId: string, quantity: number) => void;
     clearCart: () => void;
 }
 
@@ -37,6 +38,10 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         dispatch({ type: 'REMOVE_FROM_CART', payload: productId });
     };
 
+    const setQuantity = (productId: string, quantity: number) => {
+        dispatch({ type: 'SET_QUANTITY', payload: { productId, quantity } });
+    };
+
     const clearCart = () => {
         dispatch({ type: 'CLEAR_CART' });
     };
@@ -49,6 +54,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 setProducts,
                 addToCart,
                 removeFromCart,
+                setQuantity,
                 clearCart,
             }}
         >
