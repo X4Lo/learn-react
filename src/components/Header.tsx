@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Header: React.FC<{ cartCount: number }> = ({ cartCount }) => {
     return (
@@ -10,9 +11,8 @@ const Header: React.FC<{ cartCount: number }> = ({ cartCount }) => {
                     </div>
                     <div className="hidden md:block">
                         <ul className="flex space-x-4">
-                            <li><a href='#' className="text-gray-300 hover:bg-gray-700 px-3 py-2 rounded">Products</a></li>
-                            <li><a href="#" className="text-gray-300 hover:bg-gray-700 px-3 py-2 rounded">Cart ({cartCount})</a></li>
-                            <li><a href="#" className="text-gray-300 hover:bg-gray-700 px-3 py-2 rounded">Checkout</a></li>
+                            <li><a href='#' className="text-gray-300 hover:bg-gray-700 px-3 py-2 rounded"><Link to="/">Products</Link></a></li>
+                            <li><a href='#' className="text-gray-300 hover:bg-gray-700 px-3 py-2 rounded"><Link to="/cart">Cart ({cartCount})</Link></a></li>
                         </ul>
                     </div>
                 </div>
