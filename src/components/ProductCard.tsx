@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Product } from '../types/Product';
-import { ShoppingCart } from 'lucide-react';
+import { MinusIcon, PlusIcon, ShoppingCart } from 'lucide-react';
 
 interface ProductCardProps {
     product: Product;
@@ -15,6 +15,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
 
     const [isFlipped, setIsFlipped] = useState(false);
     const [isInCart, setIsInCart] = useState(false);
+    const [quantity, setQuantity] = useState(0);
 
     const handleCardClick = () => {
         setIsFlipped(!isFlipped);
@@ -33,7 +34,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
                             <img
                                 src={product.imageUrl}
                                 alt={product.name}
-                                className="w-full h-50 object-cover transition-transform duration-300 ease-in-out group-hover:scale-110 group-hover:-translate-y-4"
+                                className="w-full h-50 object-contain transition-transform duration-300 ease-in-out group-hover:scale-110 group-hover:-translate-y-4"
                             />
                         </div>
                         <div className="p-4 flex flex-col flex-1">
@@ -47,20 +48,47 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
                                     {product.category}
                                 </span>
                             </div>
-                            <button
-                                className={`mt-3 text-white text-sm font-semibold py-2 px-4 rounded flex justify-center items-center gap-2 transition duration-300 ${isInCart ? 'bg-gray-500' : 'bg-blue-500 hover:bg-blue-600'}`}
-                                disabled={isInCart}
-                                onClick={(e) => {
-                                    if (!isInCart) {
+
+                            {isInCart ? (
+                                <div className="mt-3 flex justify-between items-center gap-2">
+                                    <button
+                                        className="bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold py-2 px-3 rounded transition duration-300"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            if (quantity > 1) {
+                                                setQuantity(quantity - 1);
+                                            } else {
+                                                setIsInCart(false);
+                                            }
+                                        }}
+                                    >
+                                        <MinusIcon />
+                                    </button>
+                                    <span className="text-lg font-semibold">{quantity}</span>
+                                    <button
+                                        className="bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold py-2 px-3 rounded transition duration-300"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setQuantity(quantity + 1);
+                                        }}
+                                    >
+                                        <PlusIcon />
+                                    </button>
+                                </div>
+                            ) : (
+                                <button
+                                    className="mt-3 text-white text-sm font-semibold py-2 px-4 rounded flex justify-center items-center gap-2 transition duration-300 bg-blue-500 hover:bg-blue-600"
+                                    onClick={(e) => {
                                         e.stopPropagation();
                                         setIsInCart(true);
+                                        setQuantity(1);
                                         handleAddToCart();
-                                    }
-                                }}
-                            >
-                                <ShoppingCart size={20} />
-                                Add to Cart
-                            </button>
+                                    }}
+                                >
+                                    <ShoppingCart size={20} />
+                                    Add to Cart
+                                </button>
+                            )}
                         </div>
                     </div>
 
@@ -71,7 +99,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
                     </div>
                 </div>
             </div>
-        </div >
+        </div>
     );
 };
 
